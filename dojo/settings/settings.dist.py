@@ -96,6 +96,10 @@ env = environ.Env(
     DD_SOCIAL_AUTH_CREATE_USER=(bool, True),  # if True creates user at first login
     DD_SOCIAL_LOGIN_AUTO_REDIRECT=(bool, False),  # auto-redirect if there is only one social login method
     DD_SOCIAL_AUTH_TRAILING_SLASH=(bool, True),
+    DD_SOCIAL_AUTH_OIDC_AUTH_ENABLED=(bool, False),
+    DD_SOCIAL_AUTH_OIDC_OIDC_ENDPOINT=(str, ''),
+    DD_SOCIAL_AUTH_OIDC_KEY=(str, ''),
+    DD_SOCIAL_AUTH_OIDC_SECRET=(str, ''),
     DD_SOCIAL_AUTH_AUTH0_OAUTH2_ENABLED=(bool, False),
     DD_SOCIAL_AUTH_AUTH0_KEY=(str, ''),
     DD_SOCIAL_AUTH_AUTH0_SECRET=(str, ''),
@@ -465,6 +469,7 @@ LOGIN_URL = env('DD_LOGIN_URL')
 
 # These are the individidual modules supported by social-auth
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.oidc.OpenIdConnectAuth',
     'social_core.backends.auth0.Auth0OAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'dojo.okta.OktaOAuth2',
@@ -560,6 +565,12 @@ SOCIAL_AUTH_GITLAB_SCOPE = env('DD_SOCIAL_AUTH_GITLAB_SCOPE')
 if GITLAB_PROJECT_AUTO_IMPORT:
     SOCIAL_AUTH_GITLAB_SCOPE += ['read_repository']
 
+
+OIDC_AUTH_ENABLED = env('DD_SOCIAL_AUTH_OIDC_AUTH_ENABLED')
+SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = env('DD_SOCIAL_AUTH_OIDC_OIDC_ENDPOINT')
+SOCIAL_AUTH_OIDC_KEY = env('DD_SOCIAL_AUTH_OIDC_KEY')
+SOCIAL_AUTH_OIDC_SECRET = env('DD_SOCIAL_AUTH_OIDC_SECRET')
+
 AUTH0_OAUTH2_ENABLED = env('DD_SOCIAL_AUTH_AUTH0_OAUTH2_ENABLED')
 SOCIAL_AUTH_AUTH0_KEY = env('DD_SOCIAL_AUTH_AUTH0_KEY')
 SOCIAL_AUTH_AUTH0_SECRET = env('DD_SOCIAL_AUTH_AUTH0_SECRET')
@@ -614,6 +625,7 @@ LOGIN_EXEMPT_URLS = (
     r'^%spassword_reset/' % URL_PREFIX,
     r'^%sforgot_username' % URL_PREFIX,
     r'^%sreset/' % URL_PREFIX,
+    r'oauth2/idpresponse',
 )
 
 AUTH_PASSWORD_VALIDATORS = [
