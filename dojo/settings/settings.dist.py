@@ -469,7 +469,7 @@ LOGIN_URL = env('DD_LOGIN_URL')
 
 # These are the individidual modules supported by social-auth
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.oidc.OpenIdConnectAuth',
+    'social_core.backends.open_id_connect.OpenIdConnectAuth',
     'social_core.backends.auth0.Auth0OAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'dojo.okta.OktaOAuth2',
